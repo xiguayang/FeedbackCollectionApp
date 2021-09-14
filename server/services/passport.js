@@ -24,20 +24,29 @@ passport.use(
 			callbackURL: '/auth/google/callback',
 			proxy: true,
 		},
-		(accessToken, refreshToken, profile, done) => {
-			//a query: inside users collection, find the first record which is same with googleId
-			//this query returns a promise
-			User.findOne({ googleId: profile.id }).then((existingUser) => {
-				if (existingUser) {
-					//we already have a record with the given profile id
-					done(null, existingUser);
-				} else {
-					//we don't have a user record with this id, make a new user
-					//create a new Model instance using goolge profile.id
-					//and save it to the db
-					new User({ googleId: profile.id }).save().then((user) => done(null, user));
-				}
-			});
+		// (accessToken, refreshToken, profile, done) => {
+		// 	//a query: inside users collection, find the first record which is same with googleId
+		// 	//this query returns a promise
+		// 	User.findOne({ googleId: profile.id }).then((existingUser) => {
+		// 		if (existingUser) {
+		// 			//we already have a record with the given profile id
+		// 			done(null, existingUser);
+		// 		} else {
+		// 			//we don't have a user record with this id, make a new user
+		// 			//create a new Model instance using goolge profile.id
+		// 			//and save it to the db
+		// 			new User({ googleId: profile.id }).save().then((user) => done(null, user));
+		// 		}
+		// 	});
+		// }
+		//refactor the promise by using async/await syntax
+		async (accessToken, refreshToken, profile, done) => {
+			const existingUser = await User.findOne({ googleId: profile.id });
+			if (existingUser) {
+				done(null, existingUser);
+			}
+			const user = await new User({ googleId: profile.id }).save();
+			done(null, user);
 		}
 	)
 );
