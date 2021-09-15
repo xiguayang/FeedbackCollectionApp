@@ -9,12 +9,15 @@ module.exports = (app) => {
 	);
 
 	//route handler to handle with google callback
-	app.get('/auth/google/callback', passport.authenticate('google'));
+	app.get('/auth/google/callback', passport.authenticate('google'), (req, res) => {
+		//after user signed in, redirect to the '/surveys'
+		res.redirect('/surveys');
+	});
 
 	//add logout routes
 	app.get('/api/logout', (req, res) => {
 		req.logout();
-		res.send(req.user);
+		res.redirect('/');
 	});
 	//add route to show current user
 	app.get('/api/current_user', (req, res) => {
