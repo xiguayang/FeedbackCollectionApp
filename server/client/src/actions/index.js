@@ -27,3 +27,9 @@ export const fetchUser = () => async (dispatch) => {
 	const res = await axios.get('/api/current_user');
 	dispatch({ type: FETCH_USER, payload: res.data });
 };
+
+//sending the token from Stripe CreditCard Payments to our API server
+export const handleToken = (token) => async (dispatch) => {
+	const res = await axios.post('/api/stripe', token);
+	dispatch({ type: FETCH_USER, payload: res.data });
+};

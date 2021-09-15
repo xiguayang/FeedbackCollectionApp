@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
+// const bodyParser = require('body-parser');
 const passport = require('passport');
 
 const keys = require('./config/keys');
@@ -13,7 +14,7 @@ mongoose.connect(keys.mongoURI);
 // const authRoutes = require('./routes/authRoutes');
 //create a express application
 const app = express();
-
+app.use(express.json());
 app.use(
 	cookieSession({
 		//set the maximum time the cookie expires automatically
@@ -26,6 +27,7 @@ app.use(passport.session());
 
 //authRoutes(app)
 require('./routes/authRoutes')(app);
+require('./routes/billingRoutes')(app);
 
 //tell NodeJS to listen to this port
 //using environment variable defined by Heroku
