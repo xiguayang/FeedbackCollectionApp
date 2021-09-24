@@ -33,3 +33,11 @@ export const handleToken = (token) => async (dispatch) => {
 	const res = await axios.post('/api/stripe', token);
 	dispatch({ type: FETCH_USER, payload: res.data });
 };
+
+//submit surveys to recipients
+export const submitSurvey = (formValues, history) => async (dispatch) => {
+	const res = await axios.post('/api/surveys', formValues);
+	history.push('/surveys');
+	//just update the user data with new reduced credits
+	dispatch({ type: FETCH_USER, payload: res.data });
+};
