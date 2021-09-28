@@ -13,6 +13,14 @@ const Survey = mongoose.model('surveys');
 //make sure the user is logged in using middleware
 //make sure the user has enough credits to make survey
 module.exports = (app) => {
+	app.get('/api/surveys', requireLogin, async (req, res) => {
+		const surveys = await Survey.find({ _user: req.user.id })
+			//query.select('key1 key2') include key1 key2
+			//query.select('-key3 -key4') exclude key3 key4
+			//query.select({key1: 1, key2:1}) include 1 or true; exclude 0 or false
+			.select({ recipients: false });
+		res.send(surveys);
+	});
 	app.get('/api/surveys/:surveyId/:choice', (req, res) => {
 		res.send('Thanks for voting!');
 	});

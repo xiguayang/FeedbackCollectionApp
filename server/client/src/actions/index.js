@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_USER } from './types';
+import { FETCH_USER, FETCH_SURVEYS } from './types';
 
 //make a AJAX request to backend Express API
 //have already set proxy in setupProxy.js add '/api'
@@ -40,4 +40,9 @@ export const submitSurvey = (formValues, history) => async (dispatch) => {
 	history.push('/surveys');
 	//just update the user data with new reduced credits
 	dispatch({ type: FETCH_USER, payload: res.data });
+};
+
+export const fetchSurveys = () => async (dispatch) => {
+	const res = await axios.get('/api/surveys');
+	dispatch({ type: FETCH_SURVEYS, payload: res.data });
 };
